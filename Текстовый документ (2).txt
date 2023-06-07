@@ -1,0 +1,56 @@
+#include <iostream>
+#include <complex>
+#include <cmath>
+
+// Функция, вычисляющая прямое ДПФ
+void direct_dft(std::complex<double>* input, std::complex<double>* output, int N) {
+    for (int k = 0; k < N; ++k) {
+        output[k] = 0;
+        for (int n = 0; n < N; ++n) {
+            output[k] += input[n] * std::exp(std::complex<double>(0, -2 * 3.14 * k * n / N));
+        }
+    }
+}
+
+// Функция для вывода на экран входного и выходного сигналов
+void print_data(std::complex<double>* input, std::complex<double>* output, int N) {
+    std::cout << "Исходный сигнал:  ";
+    for (int i = 0; i < N; i++)
+        std::cout << input[i] << " ";
+    std::cout << std::endl;
+
+    std::cout << "Результат ДПФ: ";
+    for (int i = 0; i < N; i++)
+        std::cout << std::abs(output[i]) << " ";
+    std::cout << std::endl;
+}
+
+int main() {
+    setlocale(0, "rus");
+    // Запрашиваем размерность сигнала
+    std::cout << "Введите размер сигнала: ";
+    int N;
+    std::cin >> N;
+
+    // Создаем входной сигнал
+    std::complex<double>* input = new std::complex<double>[N];
+    std::cout << "Введите значения сигнала: ";
+    for (int i = 0; i < N; ++i) {
+        std::cin >> input[i];
+    }
+
+    // Выделяем память под выходной сигнал
+    std::complex<double>* output = new std::complex<double>[N];
+
+    // Вычисляем прямое ДПФ
+    direct_dft(input, output, N);
+
+    // Выводим результат
+    print_data(input, output, N);
+
+    // Освобождаем память
+    delete[] input;
+    delete[] output;
+
+    return 0;
+}
